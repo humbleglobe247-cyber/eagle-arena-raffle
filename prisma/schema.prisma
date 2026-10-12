@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  resetTokens PasswordResetToken[]
+  createdAt    DateTime @default(now())
+}
+
+model VerificationCode {
+  id        Int       @id @default(autoincrement())
+  email     String
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int       @default(0)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email])
+}
+
+model Settings {
+  id               Int       @id @default(1)
+  ticketPrice      Int       @default(0) // in kobo (₦1,000 = 100000)
+  closesAt         DateTime?
+  nextTicketNumber Int       @default(1501)
+  updatedAt        DateTime  @updatedAt
+}
+
+model Prize {
+  id        Int     @id @default(autoincrement())
+  name      String
+  imageUrl  String?
+  imagePublicId  String?
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  email     String
+  quantity  Int
+  amount    Int // in kobo
+  reference String      @unique // Paystack reference
+  status    OrderStatus @default(PENDING)
+  paidAt    DateTime?
+  createdAt DateTime    @default(now())
+
+  tickets Ticket[]
+
+  @@index([email])
+}
+
+model Ticket {
+  id      Int   @id @default(autoincrement())
+  orderId Int
+  number  Int   @unique
+
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+model Winner {
+  id           Int      @id @default(autoincrement())
+  ticketNumber Int
+  note         String?
+  emailedAt DateTime?
+  announcedAt  DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  adminId   Int
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+}
