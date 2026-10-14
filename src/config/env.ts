@@ -25,11 +25,19 @@ if (isProduction && jwtSecret.length < 32) {
   throw new Error("JWT_SECRET must be at least 32 characters in production");
 }
 
+// const frontendUrl = (
+//   value("FRONTEND_URL") || (isProduction ? "" : "http://localhost:5173")
+// ).replace(/\/$/, "");
+// if (isProduction && !frontendUrl.startsWith("https://")) {
+//   throw new Error("FRONTEND_URL must be set to an https:// address in production");
+// }
+
 const frontendUrl = (
   value("FRONTEND_URL") || (isProduction ? "" : "http://localhost:5173")
 ).replace(/\/$/, "");
-if (isProduction && !frontendUrl.startsWith("https://")) {
-  throw new Error("FRONTEND_URL must be set to an https:// address in production");
+
+if (isProduction && frontendUrl && !frontendUrl.startsWith("https://")) {
+  throw new Error("FRONTEND_URL must be an https:// address in production");
 }
 
 const trustProxy = Number(value("TRUST_PROXY") || 0);
