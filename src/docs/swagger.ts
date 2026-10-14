@@ -26,7 +26,7 @@ export const openApiSpec = swaggerJsdoc({
             { name: "Admin Auth", description: "Admin login and account" },
             { name: "Prizes", description: "Items shown on the website as what could be won" },
             { name: "Public", description: "Open endpoints for the customer-facing website" },
-            { name: "Dev", description: "development-only helpers (mock payments" },
+            { name: "Payments", description: "Payment provider notifications" },
              { name: "sales", description: "Tickets sold, revenue, orders and buyers" },
         ],
         

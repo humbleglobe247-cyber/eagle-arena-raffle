@@ -7,13 +7,14 @@ import settingsRoutes from "./routes/settingsRoutes"
 import publicRoutes from "./routes/publicRoutes";
 import systemRoutes from "./routes/systemRoutes";
 import docsRoutes from "./routes/docsRoutes";
-import devRoutes from "./routes/devRoutes";
 import winnerRoutes from "./routes/winnerRoutes";
 import salesRoutes from "./routes/salesRoutes";
 import cors from "cors";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimiter";
 import { startCleanupJob } from "./jobs/cleanupJob";
+import "./config/assertServerConfig";
+import webhookRoutes from "./routes/webHookRoutes";
 
 
 
@@ -41,6 +42,7 @@ app.use(
   })
 );
 
+app.use("/api/payments", webhookRoutes);
 
 // Everything we accept as JSON is small. Image uploads have their own 5MB limit.
 app.use(express.json({ limit: "20kb" }));
@@ -55,9 +57,7 @@ app.use("/api/admin/sales", salesRoutes)
 
 
 
-if (env.paymentProvider === "mock" && env.nodeEnv !== "production") {
-  app.use("/api/dev", devRoutes);
-}
+
 
 
 app.use((_req, res) => {
