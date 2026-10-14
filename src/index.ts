@@ -24,9 +24,11 @@ const app = express();
 app.set("trust proxy", env.trustProxy);
 
 
-if (env.nodeEnv !== "production") {
-  app.use("/api/docs", docsRoutes);
-}
+// if (env.nodeEnv !== "production") {
+//   app.use("/api/docs", docsRoutes);
+// }
+
+app.use("/api/docs", docsRoutes);
 
 app.use(helmet());
 
