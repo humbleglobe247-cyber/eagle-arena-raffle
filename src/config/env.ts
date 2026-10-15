@@ -33,7 +33,7 @@ if (isProduction && jwtSecret.length < 32) {
 // }
 
 const frontendUrl = (
-  value("FRONTEND_URL") || (isProduction ? "" : "http://localhost:5173")
+  value("FRONTEND_URL") || (isProduction ? "" : "http://localhost:5201")
 ).replace(/\/$/, "");
 
 if (isProduction && frontendUrl && !frontendUrl.startsWith("https://")) {
