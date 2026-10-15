@@ -36,7 +36,7 @@ if (isProduction && jwtSecret.length < 32) {
 
 
 const frontendUrl = (
-  value("FRONTEND_URL") || (isProduction ? "" : "http://localhost:5201")
+  value("FRONTEND_URL") || (isProduction ? "" : " https://eaglearena-raffle-draw.netlify.app/")
 ).replace(/\/$/, "");
 
 if (isProduction && frontendUrl && !frontendUrl.startsWith("https://")) {
